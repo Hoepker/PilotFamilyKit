@@ -10,6 +10,7 @@ public struct FamilyTheme: Sendable {
 
     public static let office = FamilyTheme(accent: Color(red: 0.91, green: 0.31, blue: 0.24)) // pilotRed
     public static let family = FamilyTheme(accent: Color(red: 0.30, green: 0.66, blue: 0.55)) // pilotGreen
+    public static let immo   = FamilyTheme(accent: Color(red: 0.43, green: 0.46, blue: 0.51)) // Graphit #6E7681
 }
 
 // Neutrale Tokens als System-Farben (adaptiv).
