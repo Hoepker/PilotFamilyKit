@@ -11,15 +11,19 @@ public enum FamilyMemberRole: String, CaseIterable, Sendable {
     case trustedPerson
     case other
 
+    /// Lokalisiert über `Bundle.main` (Standard von `String(localized:)`) — die
+    /// konsumierende App (MyOfficePilot rendert die Package-Screens) liefert de/en/es
+    /// aus ihrem String-Catalog. Bewusst NICHT `bundle: .module`, damit SwiftUI `Text`
+    /// und diese Rollennamen dieselbe (App-)Quelle nutzen.
     public var localizedName: String {
         switch self {
-        case .owner:         return "Inhaber"
-        case .partner:       return "Partner"
-        case .child:         return "Kind"
-        case .grandparent:   return "Großeltern"
-        case .pet:           return "Haustier"
-        case .trustedPerson: return "Vertrauensperson"
-        case .other:         return "Sonstige"
+        case .owner:         return String(localized: "Inhaber")
+        case .partner:       return String(localized: "Partner")
+        case .child:         return String(localized: "Kind")
+        case .grandparent:   return String(localized: "Großeltern")
+        case .pet:           return String(localized: "Haustier")
+        case .trustedPerson: return String(localized: "Vertrauensperson")
+        case .other:         return String(localized: "Sonstige")
         }
     }
 
