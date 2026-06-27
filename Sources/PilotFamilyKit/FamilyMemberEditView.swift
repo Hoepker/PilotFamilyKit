@@ -5,6 +5,7 @@ import PhotosUI
 /// Anlegen/Bearbeiten eines Familienmitglieds — zentral für alle Apps. Operiert auf
 /// dem geteilten `SuiteFamilyMember` via `FamilyStore`. Struktur wie MyFamilyPilots
 /// `FamilyMemberEditView` (Avatar · Person · Kontakt · Rolle/Berechtigung · Notizen).
+/// Lokalisiert über das Package-eigene Catalog ([[Localization]]).
 public struct FamilyMemberEditView: View {
     @Environment(\.dismiss) private var dismiss
 
@@ -42,19 +43,19 @@ public struct FamilyMemberEditView: View {
             if editing != nil {
                 Section {
                     Button(role: .destructive) { performDelete() } label: {
-                        Label("Mitglied löschen", systemImage: "trash")
+                        Label(pfL("Mitglied löschen"), systemImage: "trash")
                     }
                 }
             }
         }
-        .navigationTitle(editing == nil ? "Neues Mitglied" : displayName)
+        .navigationTitle(editing == nil ? pfL("Neues Mitglied") : displayName)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .cancellationAction) {
-                Button("Abbrechen") { dismiss() }
+                Button(pfL("Abbrechen")) { dismiss() }
             }
             ToolbarItem(placement: .confirmationAction) {
-                Button("Sichern") { save() }.disabled(!isValid)
+                Button(pfL("Sichern")) { save() }.disabled(!isValid)
             }
         }
         .tint(theme.accent)
@@ -79,12 +80,12 @@ public struct FamilyMemberEditView: View {
                                    fallbackIcon: role.fallbackIcon, size: 72)
                 VStack(alignment: .leading, spacing: 4) {
                     PhotosPicker(selection: $photoPickerItem, matching: .images, photoLibrary: .shared()) {
-                        Label(photoData == nil ? "Foto wählen" : "Foto ändern", systemImage: "photo")
+                        Label(photoData == nil ? pfL("Foto wählen") : pfL("Foto ändern"), systemImage: "photo")
                             .font(.subheadline.weight(.medium))
                     }
                     if photoData != nil {
                         Button(role: .destructive) { photoData = nil } label: {
-                            Text("Foto entfernen").font(.footnote)
+                            Text(pfL("Foto entfernen")).font(.footnote)
                         }
                     }
                 }
@@ -95,63 +96,63 @@ public struct FamilyMemberEditView: View {
     }
 
     private var personSection: some View {
-        Section("Person") {
-            TextField("Anzeigename", text: $displayName)
+        Section(pfL("Person")) {
+            TextField(pfL("Anzeigename"), text: $displayName)
                 .onChange(of: displayName) { _, v in
                     if initials.isEmpty || initials.count <= 2 { initials = autoInitials(from: v) }
                 }
-            TextField("Initialen", text: $initials)
+            TextField(pfL("Initialen"), text: $initials)
                 .textInputAutocapitalization(.characters)
                 .onChange(of: initials) { _, v in initials = String(v.uppercased().prefix(3)) }
-            Toggle("Geburtstag", isOn: $hasBirthday)
+            Toggle(pfL("Geburtstag"), isOn: $hasBirthday)
             if hasBirthday {
-                DatePicker("Datum", selection: $birthday, displayedComponents: .date)
+                DatePicker(pfL("Datum"), selection: $birthday, displayedComponents: .date)
             }
         }
     }
 
     private var kontaktSection: some View {
-        Section("Kontakt") {
-            TextField("E-Mail", text: $email)
+        Section(pfL("Kontakt")) {
+            TextField(pfL("E-Mail"), text: $email)
                 .keyboardType(.emailAddress).textInputAutocapitalization(.never).autocorrectionDisabled()
-            TextField("Telefon", text: $phone).keyboardType(.phonePad)
-            TextField("Postanschrift", text: $address, axis: .vertical).lineLimit(2...4)
+            TextField(pfL("Telefon"), text: $phone).keyboardType(.phonePad)
+            TextField(pfL("Postanschrift"), text: $address, axis: .vertical).lineLimit(2...4)
         }
     }
 
     @ViewBuilder
     private var roleSection: some View {
         Section {
-            Picker("Rolle", selection: $role) {
+            Picker(pfL("Rolle"), selection: $role) {
                 ForEach(FamilyMemberRole.allCases, id: \.self) { r in
                     Text(r.localizedName).tag(r)
                 }
             }
-            Picker("Avatar-Farbe", selection: $avatarColorSeed) {
-                Text("Pilot (Grün/Blau)").tag("pilot")
-                Text("Coral").tag("coral")
-                Text("Neutral (Grau)").tag("neutral")
+            Picker(pfL("Avatar-Farbe"), selection: $avatarColorSeed) {
+                Text(pfL("Pilot (Grün/Blau)")).tag("pilot")
+                Text(pfL("Coral")).tag("coral")
+                Text(pfL("Neutral (Grau)")).tag("neutral")
             }
         } header: {
-            Text("Rolle & Darstellung")
+            Text(pfL("Rolle & Darstellung"))
         }
         if role.forcedCanWrite == .toggleable {
             Section {
-                Toggle("Schreibrechte", isOn: $canWriteToggle)
+                Toggle(pfL("Schreibrechte"), isOn: $canWriteToggle)
             } header: {
-                Text("Berechtigung")
+                Text(pfL("Berechtigung"))
             } footer: {
-                Text("Ohne Schreibrechte nur Lesezugriff — keine Änderungen möglich.")
+                Text(pfL("Ohne Schreibrechte nur Lesezugriff — keine Änderungen möglich."))
             }
         }
     }
 
     private var notesSection: some View {
         Section {
-            TextField("Notizen (Allergien, Hausarzt, …)", text: $notes, axis: .vertical)
+            TextField(pfL("Notizen (Allergien, Hausarzt, …)"), text: $notes, axis: .vertical)
                 .lineLimit(3...6)
         } header: {
-            Text("Notizen")
+            Text(pfL("Notizen"))
         }
     }
 

@@ -7,6 +7,7 @@ import SwiftData
 /// beigesteuert (app-spezifische CloudKit-Sheets).
 ///
 /// Erwartet den geteilten Suite-Container im Environment (`.modelContainer(...)`).
+/// Lokalisiert über das Package-eigene Catalog ([[Localization]]) — app-unabhängig.
 public struct FamilyMembersScreen: View {
     @Environment(\.modelContext) private var modelContext
     @Query(sort: [SortDescriptor(\SuiteFamilyMember.joinedAt)])
@@ -36,12 +37,12 @@ public struct FamilyMembersScreen: View {
         Group {
             if members.isEmpty {
                 ContentUnavailableView {
-                    Label("Keine Familie", systemImage: "person.2")
+                    Label(pfL("Keine Familie"), systemImage: "person.2")
                 } description: {
-                    Text("Lege ein Familienmitglied an oder nimm eine Einladung an.")
+                    Text(pfL("Lege ein Familienmitglied an oder nimm eine Einladung an."))
                 } actions: {
-                    Button("Mitglied anlegen") { creating = true }
-                    if let onAccept { Button("Einladung annehmen") { onAccept() } }
+                    Button(pfL("Mitglied anlegen")) { creating = true }
+                    if let onAccept { Button(pfL("Einladung annehmen")) { onAccept() } }
                 }
             } else {
                 List {
@@ -53,7 +54,7 @@ public struct FamilyMembersScreen: View {
                 .scrollContentBackground(.hidden)
             }
         }
-        .navigationTitle("Familie")
+        .navigationTitle(pfL("Familie"))
         .tint(theme.accent)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
@@ -70,16 +71,16 @@ public struct FamilyMembersScreen: View {
     private var identitySection: some View {
         Section {
             Picker(selection: $currentMemberID) {
-                Text("Nicht zugeordnet").tag("")
+                Text(pfL("Nicht zugeordnet")).tag("")
                 ForEach(members) { m in
-                    Text(m.displayName.isEmpty ? "Unbenannt" : m.displayName).tag(m.id.uuidString)
+                    Text(m.displayName.isEmpty ? pfL("Unbenannt") : m.displayName).tag(m.id.uuidString)
                 }
             } label: {
-                Label("Das bin ich", systemImage: "person.fill.checkmark")
+                Label(pfL("Das bin ich"), systemImage: "person.fill.checkmark")
             }
             .pickerStyle(.menu)
         } footer: {
-            Text("Wähle, welches Familienmitglied Du auf diesem Gerät bist — so siehst Du genau die für Dich freigegebenen Inhalte.")
+            Text(pfL("Wähle, welches Familienmitglied Du auf diesem Gerät bist — so siehst Du genau die für Dich freigegebenen Inhalte."))
         }
     }
 
@@ -96,9 +97,9 @@ public struct FamilyMembersScreen: View {
             }
             .onDelete(perform: delete)
         } header: {
-            Text("Mitglieder")
+            Text(pfL("Mitglieder"))
         } footer: {
-            Text("Tippe ein Mitglied an, um es zu bearbeiten. Die Familie gilt in allen Pilot-Apps.")
+            Text(pfL("Tippe ein Mitglied an, um es zu bearbeiten. Die Familie gilt in allen Pilot-Apps."))
         }
     }
 
@@ -108,16 +109,16 @@ public struct FamilyMembersScreen: View {
             Section {
                 if let onInvite {
                     Button { onInvite() } label: {
-                        Label("Mitglied einladen", systemImage: "person.crop.circle.badge.plus")
+                        Label(pfL("Mitglied einladen"), systemImage: "person.crop.circle.badge.plus")
                     }
                 }
                 if let onAccept {
                     Button { onAccept() } label: {
-                        Label("Einladung annehmen", systemImage: "envelope.open")
+                        Label(pfL("Einladung annehmen"), systemImage: "envelope.open")
                     }
                 }
             } footer: {
-                Text("Lade Mitglieder per iCloud ein oder nimm eine Einladung an — eine Familie für die ganze Suite.")
+                Text(pfL("Lade Mitglieder per iCloud ein oder nimm eine Einladung an — eine Familie für die ganze Suite."))
             }
         }
     }
@@ -137,14 +138,14 @@ private struct MemberRow: View {
     var body: some View {
         HStack(spacing: PFSpacing.s) {
             FamilyMemberAvatar(initials: member.initials, photoData: member.photoData,
-                               seed: member.avatarColorSeed.isEmpty ? member.id.uuidString : member.id.uuidString,
+                               seed: member.id.uuidString,
                                fallbackIcon: member.role.fallbackIcon, size: 44)
             VStack(alignment: .leading, spacing: 2) {
                 HStack(spacing: PFSpacing.xs) {
-                    Text(member.displayName.isEmpty ? "Unbenannt" : member.displayName)
+                    Text(member.displayName.isEmpty ? pfL("Unbenannt") : member.displayName)
                         .font(.body.weight(.semibold)).foregroundStyle(Color.pfInkPrimary)
                     if isCurrentUser {
-                        Text("Du").font(.caption2.weight(.semibold)).foregroundStyle(accent)
+                        Text(pfL("Du")).font(.caption2.weight(.semibold)).foregroundStyle(accent)
                             .padding(.horizontal, 6).padding(.vertical, 2)
                             .background(accent.opacity(0.14), in: Capsule())
                     }
@@ -159,7 +160,7 @@ private struct MemberRow: View {
             }
             Spacer()
             if !member.canWrite {
-                Label("Nur Lesen", systemImage: "eye")
+                Label(pfL("Nur Lesen"), systemImage: "eye")
                     .labelStyle(.iconOnly)
                     .font(.system(size: 12, weight: .medium))
                     .foregroundStyle(Color.pfInkTertiary)

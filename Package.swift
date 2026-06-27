@@ -9,6 +9,9 @@ let package = Package(
         .library(name: "PilotFamilyKit", targets: ["PilotFamilyKit"]),
     ],
     targets: [
-        .target(name: "PilotFamilyKit"),
+        .target(
+            name: "PilotFamilyKit",
+            resources: [.process("Resources")]
+        ),
     ]
 )
