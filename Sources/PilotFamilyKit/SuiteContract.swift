@@ -32,13 +32,17 @@ public final class SuiteContract {
     /// Inhaber des Vertrags (MyFamilyPilot `Entry.ownerID`). Zusammen mit
     /// `shareGrants` ergibt das „wer kann den Vertrag sehen" (Inhaber + Empfänger).
     public var ownerID: UUID?
+    /// Anbieter-/Firmenlogo (klein, aus MyFamilyPilot `Entry.providerLogoData`) — damit
+    /// MyOfficePilot die Vertrags-Kachel mit dem Logo statt einem generischen Icon zeigt.
+    /// Extern gespeichert → CKAsset.
+    @Attribute(.externalStorage) public var providerLogoData: Data?
     public var updatedAt: Date = Date()
     public var createdAt: Date = Date()
 
     public init(id: UUID = UUID(), title: String = "", providerName: String = "",
                 entryTypeRaw: String = "contract", startDate: Date? = nil, endDate: Date? = nil,
                 shareGrantsRaw: String = "", documentCount: Int = 0, ownerID: UUID? = nil,
-                updatedAt: Date = Date()) {
+                providerLogoData: Data? = nil, updatedAt: Date = Date()) {
         self.id = id
         self.title = title
         self.providerName = providerName
@@ -48,6 +52,7 @@ public final class SuiteContract {
         self.shareGrantsRaw = shareGrantsRaw
         self.documentCount = documentCount
         self.ownerID = ownerID
+        self.providerLogoData = providerLogoData
         self.updatedAt = updatedAt
         self.createdAt = Date()
     }
