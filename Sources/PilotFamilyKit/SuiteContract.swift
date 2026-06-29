@@ -25,12 +25,16 @@ public final class SuiteContract {
     /// Pro-Person-Freigaben im Format `"<key>:<level>"`, `\n`-getrennt (key = "family"
     /// oder Mitglieds-UUID). READ-ONLY in MyOfficePilot — nur zur Anzeige.
     public var shareGrantsRaw: String = ""
+    /// Anzahl der im Vertrag hinterlegten Dokumente (in MyFamilyPilot) — damit
+    /// MyOfficePilot die Zahl auf der Akten-Kachel zeigen kann, ohne MFPs Dokument-
+    /// Container zu kennen.
+    public var documentCount: Int = 0
     public var updatedAt: Date = Date()
     public var createdAt: Date = Date()
 
     public init(id: UUID = UUID(), title: String = "", providerName: String = "",
                 entryTypeRaw: String = "contract", startDate: Date? = nil, endDate: Date? = nil,
-                shareGrantsRaw: String = "", updatedAt: Date = Date()) {
+                shareGrantsRaw: String = "", documentCount: Int = 0, updatedAt: Date = Date()) {
         self.id = id
         self.title = title
         self.providerName = providerName
@@ -38,6 +42,7 @@ public final class SuiteContract {
         self.startDate = startDate
         self.endDate = endDate
         self.shareGrantsRaw = shareGrantsRaw
+        self.documentCount = documentCount
         self.updatedAt = updatedAt
         self.createdAt = Date()
     }
