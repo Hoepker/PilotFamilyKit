@@ -29,12 +29,16 @@ public final class SuiteContract {
     /// MyOfficePilot die Zahl auf der Akten-Kachel zeigen kann, ohne MFPs Dokument-
     /// Container zu kennen.
     public var documentCount: Int = 0
+    /// Inhaber des Vertrags (MyFamilyPilot `Entry.ownerID`). Zusammen mit
+    /// `shareGrants` ergibt das „wer kann den Vertrag sehen" (Inhaber + Empfänger).
+    public var ownerID: UUID?
     public var updatedAt: Date = Date()
     public var createdAt: Date = Date()
 
     public init(id: UUID = UUID(), title: String = "", providerName: String = "",
                 entryTypeRaw: String = "contract", startDate: Date? = nil, endDate: Date? = nil,
-                shareGrantsRaw: String = "", documentCount: Int = 0, updatedAt: Date = Date()) {
+                shareGrantsRaw: String = "", documentCount: Int = 0, ownerID: UUID? = nil,
+                updatedAt: Date = Date()) {
         self.id = id
         self.title = title
         self.providerName = providerName
@@ -43,6 +47,7 @@ public final class SuiteContract {
         self.endDate = endDate
         self.shareGrantsRaw = shareGrantsRaw
         self.documentCount = documentCount
+        self.ownerID = ownerID
         self.updatedAt = updatedAt
         self.createdAt = Date()
     }
